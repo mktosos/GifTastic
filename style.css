@@ -1,0 +1,13 @@
+button { 
+  color: cadetblue;
+  margin: 5px;
+  text-transform: uppercase;
+};
+
+#gifs-appear-here{
+    display: grid;
+    grid-column-gap: 50px;
+    grid-template-columns: auto auto auto;
+    background-color: #2196F3;
+    padding: 10px;
+  }
