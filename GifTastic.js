@@ -4,15 +4,15 @@ for (let index = 0; index < topics.length; index++) {
     var button = $("#buttonDiv").append("<button class=" + dpIndex +">");
     var topicsIndex = (topics[index]);
     $('button.'+dpIndex).attr("data-person",topicsIndex);
+    $('button.'+dpIndex).text(topicsIndex);
     console.log(dpIndex);
 }
-//$("button").on("click",grabGifs());
  
 $("button").on("click", function() {
     console.log("hi")
     var person = $(this).attr("data-person");
     var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-      person + "&api_key=dc6zaTOxFJmzC&limit=10";
+      person + "&api_key=EoguPzXakIlXVhK80UcmN4L3vU1NBwAb&limit=10";
       
     $.ajax({
       url: queryURL,
