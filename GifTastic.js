@@ -1,21 +1,7 @@
 var topics = ["javascript", "css", "french bulldog", "fishing", "boston terrier", "html","kayak", "coding", "large mouth bass", "yoga","ashtanga","inversion"]
 
 assembleButtons();
-listen();
-
-  // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
-  var state = $(this).attr("data-state");
-  // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-  // Then, set the image's data-state to animate
-  // Else set src to the data-still value
-  if (state === "still") {
-    $(this).attr("src", $(this).attr("data-animate"));
-    $(this).attr("data-state", "animate");
-  } else {
-    $(this).attr("src", $(this).attr("data-still"));
-    $(this).attr("data-state", "still");
-  }
-
+grabGifs();
 
 //listens for return key in input field
 var input = document.getElementById("addNames");
@@ -30,77 +16,9 @@ input.addEventListener("keyup", function(event) {
     document.getElementById("addNames").value="";
     $('#buttonDiv').html(""); 
     assembleButtons(); 
-    listen();
-  }else{
-    return;
+    grabGifs();
   }
 });
-
-function listen(){
-//button triggers ajax query based on data-person attr
-  $("button").on("click", function() {
-      var name = $(this).attr("data-person");
-      var queryURL="https://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=EoguPzXakIlXVhK80UcmN4L3vU1NBwAb&limit=10";
-        
-      $.ajax({
-        url: queryURL,
-        method: "GET"
-      })
-        .then(function(response) {
-          var results = response.data;
-
-          for (var i = 0; i < results.length; i++) {
-            var gifDiv = $("<div>");
-
-            var rating = results[i].rating;
-
-            var p = $("<p>").text("Rating: " + rating);
-
-
-
-
-
-            urlStr=results[i].images.fixed_height.url
-            console.log(urlStr);
-            var newUrlStr = urlStr.slice(0, -4) +"_s"+urlStr.slice(-4);
-            console.log(newUrlStr);
-
-
-            
-
-
-
-
-
-            var personImage = $("<img>");
-            personImage.attr("src", newUrlStr);
-            personImage.attr("data-still", newUrlStr);
-            personImage.attr("data-animate", urlStr);
-            personImage.attr("data-state","still");
-            personImage.attr("class","gif");
-            $(".gif").on("click", function() {
-              var state = $(this).attr("data-state");
-              // If the clicked image's state is still, update its src attribute to what its data-animate value is.
-              // Then, set the image's data-state to animate
-              // Else set src to the data-still value
-              if (state === "still") {
-                $(this).attr("src", $(this).attr("data-animate"));
-                $(this).attr("data-state", "animate");
-              } else {
-                $(this).attr("src", $(this).attr("data-still"));
-                $(this).attr("data-state", "still");
-              }
-            });
-            console.log(results[i].images.fixed_height.url)
-            gifDiv.prepend(p);
-            gifDiv.prepend(personImage);
-
-            $("#gifs-appear-here").prepend(gifDiv);
-          }
-        });
-    });
-  }  
-
 //creates buttons in for loop through array above
 function assembleButtons(){
   for (let index = 0; index < topics.length; index++) {
@@ -109,7 +27,50 @@ function assembleButtons(){
       var topicsIndex = (topics[index]);
       $('button.'+dpIndex).attr("data-person",topicsIndex);
       $('button.'+dpIndex).text(topicsIndex);
-      console.log(dpIndex);
   }
 }
-$("img").on("click", function() { alert ("hey")});
+function grabGifs(){
+//button triggers ajax query based on data-person attr
+  $("button").on("click", function() {
+      var name = $(this).attr("data-person");
+      var queryURL="https://api.giphy.com/v1/gifs/search?q=" + name + "&api_key=EoguPzXakIlXVhK80UcmN4L3vU1NBwAb&limit=10";
+      $.ajax({
+      url: queryURL,
+      method: "GET"
+      }) 
+        //after getting data add ratings in div
+        .then(function(response) {
+          var results = response.data;
+          for (var i = 0; i < results.length; i++) {
+            var gifDiv = $("<div>");
+            var rating = results[i].rating;
+            var p = $("<p>").text("Rating: " + rating);
+            //get url from object, add "_s" in string for still image
+            urlStr=results[i].images.fixed_height.url
+            var newUrlStr = urlStr.slice(0, -4) +"_s"+urlStr.slice(-4);
+            //dynamicaly create img with various attributes needed to pause and animate
+            var personImage = $("<img>");
+            personImage.attr("src", newUrlStr);
+            personImage.attr("data-still", newUrlStr);
+            personImage.attr("data-animate", urlStr);
+            personImage.attr("data-state","still");
+            personImage.attr("class","gif");
+            // on click, flip flop still/animate state to opposite of present state
+            $("img").on("click", function() {
+              var state = $(this).attr("data-state");
+              if (state === "still") {
+                $(this).attr("src", $(this).attr("data-animate"));
+                $(this).attr("data-state", "animate");
+              } else {
+                $(this).attr("src", $(this).attr("data-still"));
+                $(this).attr("data-state", "still");
+              }
+            });
+            //add images to div, display div w/ image and rating
+            gifDiv.prepend(p);
+            gifDiv.prepend(personImage);
+            $("#gifs-appear-here").prepend(gifDiv);
+          }
+        });
+    });
+  }  
