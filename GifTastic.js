@@ -1,14 +1,27 @@
-var topics = ["gameboy", "atari lynx", "gameboy advanced", "sega saturn", "atari 2600", "coleco","nes", "snes", "xbox 360", "playstation","ps2","ps3"]
+var topics = ["javascript", "css", "french bulldog", "fishing", "boston terrier", "html","kayak", "coding", "large mouth bass", "yoga","ashtanga","inversion"]
 
 assembleButtons();
 listen();
+
+  // The attr jQuery method allows us to get or set the value of any attribute on our HTML element
+  var state = $(this).attr("data-state");
+  // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+  // Then, set the image's data-state to animate
+  // Else set src to the data-still value
+  if (state === "still") {
+    $(this).attr("src", $(this).attr("data-animate"));
+    $(this).attr("data-state", "animate");
+  } else {
+    $(this).attr("src", $(this).attr("data-still"));
+    $(this).attr("data-state", "still");
+  }
+
 
 //listens for return key in input field
 var input = document.getElementById("addNames");
 input.addEventListener("keyup", function(event) {
   event.preventDefault();
   if (event.keyCode === 13 && document.getElementById("addNames").value!=="") {
-   
     // get input val to add button
     var inputVal = document.getElementById("addNames").value;
     //puts inputted val into topics array
@@ -16,10 +29,8 @@ input.addEventListener("keyup", function(event) {
     //clears input box and buttonDiv of original buttons
     document.getElementById("addNames").value="";
     $('#buttonDiv').html(""); 
-    
     assembleButtons(); 
     listen();
-    
   }else{
     return;
   }
@@ -45,9 +56,42 @@ function listen(){
 
             var p = $("<p>").text("Rating: " + rating);
 
-            var personImage = $("<img>");
-            personImage.attr("src", results[i].images.fixed_height.url);
 
+
+
+
+            urlStr=results[i].images.fixed_height.url
+            console.log(urlStr);
+            var newUrlStr = urlStr.slice(0, -4) +"_s"+urlStr.slice(-4);
+            console.log(newUrlStr);
+
+
+            
+
+
+
+
+
+            var personImage = $("<img>");
+            personImage.attr("src", newUrlStr);
+            personImage.attr("data-still", newUrlStr);
+            personImage.attr("data-animate", urlStr);
+            personImage.attr("data-state","still");
+            personImage.attr("class","gif");
+            $(".gif").on("click", function() {
+              var state = $(this).attr("data-state");
+              // If the clicked image's state is still, update its src attribute to what its data-animate value is.
+              // Then, set the image's data-state to animate
+              // Else set src to the data-still value
+              if (state === "still") {
+                $(this).attr("src", $(this).attr("data-animate"));
+                $(this).attr("data-state", "animate");
+              } else {
+                $(this).attr("src", $(this).attr("data-still"));
+                $(this).attr("data-state", "still");
+              }
+            });
+            console.log(results[i].images.fixed_height.url)
             gifDiv.prepend(p);
             gifDiv.prepend(personImage);
 
@@ -68,3 +112,4 @@ function assembleButtons(){
       console.log(dpIndex);
   }
 }
+$("img").on("click", function() { alert ("hey")});
