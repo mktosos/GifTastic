@@ -1,4 +1,4 @@
-var topics = ["javascript", "css", "french bulldog", "fishing", "boston terrier", "html","kayak", "coding", "large mouth bass", "yoga","ashtanga","inversion"]
+var topics = ["javascript", "css", "french bulldog", "fishing", "boston terrier", "html","kayak", "coding", "large mouth bass", "yoga","ashtanga","beer"]
 
 assembleButtons();
 grabGifs();
@@ -56,7 +56,7 @@ function grabGifs(){
             personImage.attr("data-state","still");
             personImage.attr("class","gif");
             // on click, flip flop still/animate state to opposite of present state
-            $(".gif").on("click", function() {
+            $("img").on("click", function() {
               var state = $(this).attr("data-state");
               if (state === "still") {
                 $(this).attr("src", $(this).attr("data-animate"));
