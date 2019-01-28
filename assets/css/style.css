@@ -12,5 +12,13 @@ button {
     padding: 10px;
   }
 div{
-    display: inline;
-}  
+    display: inline-block;
+} 
+#addNamesDiv{
+  width: 100%;
+  padding: 20px;
+  margin: 20px;
+}
+#gifs-appear-here{
+  margin-left: 10px;
+}

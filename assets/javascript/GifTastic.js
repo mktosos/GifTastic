@@ -1,4 +1,4 @@
-var topics = ["javascript", "css", "french bulldog", "fishing", "boston terrier", "html","kayak", "coding", "large mouth bass", "yoga","ashtanga","inversion"]
+var topics = ["javascript", "css", "fishing", "boston terrier", "html","kayak", "coding", "github", "yoga","ashtanga","beer"]
 
 assembleButtons();
 grabGifs();
@@ -44,7 +44,14 @@ function grabGifs(){
           for (var i = 0; i < results.length; i++) {
             var gifDiv = $("<div>");
             var rating = results[i].rating;
-            var p = $("<p>").text("Rating: " + rating);
+
+
+            var title = results[i].title;
+            console.log(title);
+
+
+            var p = $("<p>").text(" Rating: " + rating);
+            var q = $("<p>").text(title);
             //get url from object, add "_s" in string for still image
             urlStr=results[i].images.fixed_height.url
             var newUrlStr = urlStr.slice(0, -4) +"_s"+urlStr.slice(-4);
@@ -56,7 +63,7 @@ function grabGifs(){
             personImage.attr("data-state","still");
             personImage.attr("class","gif");
             // on click, flip flop still/animate state to opposite of present state
-            $(".gif").on("click", function() {
+            $("img").on("click", function() {
               var state = $(this).attr("data-state");
               if (state === "still") {
                 $(this).attr("src", $(this).attr("data-animate"));
@@ -69,6 +76,7 @@ function grabGifs(){
             //add images to div, display div w/ image and rating
             gifDiv.prepend(p);
             gifDiv.prepend(personImage);
+            gifDiv.prepend(q);
             $("#gifs-appear-here").prepend(gifDiv);
           }
         });
